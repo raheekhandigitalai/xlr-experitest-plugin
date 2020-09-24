@@ -12,6 +12,7 @@
 <synthetic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.xebialabs.com/deployit/synthetic" xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd">
 
     <type type="experitest.Server" extends="configuration.HttpConnection" label="Experitest: Instance">
+        <property name="scriptLocation" hidden="true" default="experitest/TestConnection.py"/>
         <property name="authenticationMethod" kind="enum" enum-class="com.xebialabs.xlrelease.domain.configuration.HttpConnection$AuthenticationMethod" default="Basic">
         <enum-values>
             <value>None</value>
@@ -21,10 +22,29 @@
         </property>
         <property name="domain" hidden="true" default="NOTUSED"/>
     </type>
+
+    <type type="experitest.Task" extends="xlrelease.PythonScript" virtual="true">
+        <property name="iconLocation" hidden="true" default="experitest/experitest_logo.png"/>
+        <property name="taskColor" hidden="true" default="#ABFF00"/>
+        <property name="server" category="input" label="Server" required="true"
+                  description="The Experitest Server definition to use" referenced-type="experitest.Server" kind="ci"/>
+    </type>
+
+    <type type="experitest.TriggerEspressoTestCase" extends="experitest.Task">
+        <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
+        <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
+        <property name="runningType" category="input" label="Running Type" required="true" description="Value should be coverage or fastFeedback" kind="string" />
+        <property name="app" category="input" label="APK Application" required="true" description="Path to the APK file, i.e. C:\Desktop\file.apk" kind="string" />
+        <property name="testApp" category="input" label="Test APK Application" required="true" description="Path to the Test APK file, i.e. C:\Desktop\file-androidTest.apk" kind="string" />
+        <property name="deviceQueries" category="input" label="Device Query" required="true" description="A Device Query based on the device(s) the tests should run on" kind="string" />
+        <property name="output" category="output"/>
+    </type>
+
     <type type="experitest.Tile" extends="xlrelease.Tile" virtual="true">
         <property default="release,folder,global" hidden="true" name="supportedScopes" kind="list_of_string"/>
         <property name="instance" category="input" required="true" referenced-type="experitest.Server" kind="ci"/>
     </type>
+
     <type type="experitest.TestHistoryTile" label="Experitest Test History" extends="experitest.Tile"
           description="Visualizes the result and duration of recent automated test executions">
         <property name="scriptLocation" default="experitest/LatestTestsTile.py" hidden="true"/>
@@ -47,4 +67,5 @@
         <property name="maxCount" category="input" kind="integer" default="100" required="true"
                   description="Maximum number of tests to display."/>
     </type>
+
 </synthetic>
