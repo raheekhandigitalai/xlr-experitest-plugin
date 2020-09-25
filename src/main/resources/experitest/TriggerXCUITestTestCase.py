@@ -29,7 +29,7 @@ logger.error("Header Object loaded correctly with input parameters.")
 # logger.error(headers)
 
 payload = {
-    'executionType': 'espresso',
+    'executionType': 'xcuitest',
     'runningType': runningType,
     # 'app': app,
     # 'testApp': testApp,
@@ -37,7 +37,6 @@ payload = {
 }
 
 logger.error("Payload Object loaded correctly with input parameters.")
-# logger.error(payload)
 
 files = [
     ('app', open(app,'rb')),
@@ -45,17 +44,9 @@ files = [
 ]
 
 logger.error("Files Object loaded correctly with input parameters.")
-# logger.error(files)
 
 # send POST request to /api/v1/test-run/execute-test-run-async endpoint
 r = requests.post(url, headers=headers, data=payload, files=files, verify=False)
-
-# logger.error(url)
-# logger.error(r.request.body)
-# logger.error(r.request.headers)
-
-# logger.error(r.errorDump())
-# logger.error(rawData["data"]);
 
 # check for good response
 if r.status_code != 200:
@@ -64,19 +55,3 @@ if r.status_code != 200:
     )
 else:
     output = r.text
-
-# import requests
-# url = "https://uscloud.experitest.com/api/v1/test-run/execute-test-run-async"
-# payload = {'executionType': 'espresso',
-#            'runningType': 'fastFeedback',
-#            'deviceQueries': '@os=\'android\''}
-# files = [
-#     ('app', open('/C:/Users/Rahee/Desktop/Clients/medidata/Archive/app-local-debug.apk','rb')),
-#     ('testApp', open('/C:/Users/Rahee/Desktop/Clients/medidata/Archive/app-local-debug-androidTest.apk','rb'))
-# ]
-# headers = {
-#     'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ4cC51Ijo3MzU0NDMsInhwLnAiOjE2NjA5MDMsInhwLm0iOjE1Nzg2MDM5NTA1MTUsImV4cCI6MTkxMDc5NDYyOCwiaXNzIjoiY29tLmV4cGVyaXRlc3QifQ.CMJSREYHuaHYC3GTDGYO6VN7Osf0Rnq6oX_LHNZjtl4',
-#     'Cookie': 'XSRF-TOKEN=2a329ebd-d9b3-42e9-b0db-109552a712bc; JSESSIONID=32DC33D46F72D4B5DF361CD48DC27F5A'
-# }
-# response = requests.request("POST", url, headers=headers, data = payload, files = files)
-# print(response.text.encode('utf8'))
