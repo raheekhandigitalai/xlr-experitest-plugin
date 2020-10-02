@@ -10,25 +10,20 @@
 
 import time
 import json
-import org.slf4j.LoggerFactory as LoggerFactory
-import base64
 
-logger = LoggerFactory.getLogger("Experitest")
-
-uri = "/reporter/api/testView"
+uri = "/reporter/api/tests/list?projectName={}".format(projectName)
 
 body = json.dumps(
     {
-        "name": "RaheeTestView_1.0",
-        "byKey": "date",
-        "groupByKey1": "device.os",
-        "groupByKey2": "device.version",
-        "keys": [
+        "returnTotalCount": True,
+        "limit": maxCount,
+        "page": 1,
+        "sort": [
             {
-                "date"
+                "property": "start_time",
+                "descending": True
             }
-        ],
-        "showInDashboard": False
+        ]
     }
 )
 
@@ -47,5 +42,6 @@ else:
 
 data = {
     "rawData": rawData["data"],
-    "instance": instance["url"]
+    "instance": instance["url"],
+    "projectName": projectName
 }

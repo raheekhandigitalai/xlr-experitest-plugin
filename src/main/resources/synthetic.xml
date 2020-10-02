@@ -30,6 +30,7 @@
                   description="The Experitest Server definition to use" referenced-type="experitest.Server" kind="ci"/>
     </type>
 
+<!--    <type type="experitest.unittests.TriggerEspressoTestCase" extends="experitest.Task">-->
     <type type="experitest.TriggerEspressoTestCase" extends="experitest.Task">
         <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
         <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />

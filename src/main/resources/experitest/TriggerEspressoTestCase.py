@@ -10,77 +10,111 @@
 import requests
 import org.slf4j.LoggerFactory as LoggerFactory
 import base64
-
+import json
+#
 logger = LoggerFactory.getLogger("Experitest")
-
-# New Experitest logic
-# setup the request url
-#api_endpoint = "/api/v1/test-run/execute-test-run-async"
-api_endpoint = "/reporter/api/projects"
-url = server.get('url') + "%s" % api_endpoint
-
-#logger.error(url)
-
-usrPass = server.get('username') + ":" + server.get('password')
-
-headers = {
-    'Content-Type' : "application/json",
-    'Authorization' : 'Basic %s' % base64.b64encode(usrPass)
-}
-
-#logger.error("Header Object loaded correctly with input parameters.")
-# logger.error(headers)
-
+#
+# # New Experitest logic
+# # setup the request url
+# api_endpoint = "/api/v1/test-run/execute-test-run-async"
+# url = server.get('url') + "%s" % api_endpoint
+#
+# logger.error(url)
+#
+# usrPass = server.get('username') + ":" + server.get('password')
+#
+# headers = {
+#     'Content-Type' : "application/json",
+#     'Authorization' : 'Basic %s' % base64.b64encode(usrPass)
+# }
+#
+# logger.error("Header Object loaded correctly with input parameters.")
+# logger.error(json.dumps(headers))
+#
+# if deviceQueries == 'android':
+#     deviceQuery = '@os=\'android\''
+# else:
+#     deviceQuery = '@os=\'ios\''
+#
 # payload = {
 #     'executionType': 'espresso',
 #     'runningType': runningType,
-#     # 'app': app,
-#     # 'testApp': testApp,
-#     'deviceQueries': deviceQueries
+#     'deviceQueries': deviceQuery
 # }
-
-#logger.error("Payload Object loaded correctly with input parameters.")
-# logger.error(payload)
-
+#
+# logger.error("Payload Object loaded correctly with input parameters.")
+# logger.error(json.dumps(payload))
+#
 # files = [
 #     ('app', open(app,'rb')),
 #     ('testApp', open(testApp,'rb'))
 # ]
+#
+# #logger.error("Files Object loaded correctly with input parameters.")
+# # logger.error(files)
+#
+# # send POST request to /api/v1/test-run/execute-test-run-async endpoint
+# r = requests.post(url, headers=headers, data=payload, files=files, verify=False)
+#
+# # check for good response
+# if r.status_code != 200:
+#     raise Exception(
+#         "Error executing Espresso Test Case. Please check input parameters."
+#     )
+#     # logger.error(r.errorDump())
+# else:
+#     output = r.text
 
-#logger.error("Files Object loaded correctly with input parameters.")
-# logger.error(files)
-
-# send POST request to /api/v1/test-run/execute-test-run-async endpoint
-#r = requests.post(url, headers=headers, data=payload, files=files, verify=False)
-r = requests.get(url, headers=headers, verify=False)
-
-# logger.error(url)
-# logger.error(r.request.body)
-# logger.error(r.request.headers)
-
-# logger.error(r.errorDump())
-# logger.error(rawData["data"]);
-
-# check for good response
-if r.status_code != 200:
-    raise Exception(
-        "Error executing Espresso Test Case. Please check input parameters."
-    )
-else:
-    output = r.text
-
-# import requests
 # url = "https://uscloud.experitest.com/api/v1/test-run/execute-test-run-async"
+
+# New Experitest logic
+# setup the request url
+api_endpoint = "/api/v1/test-run/execute-test-run-async"
+url = server.get('url') + "%s" % api_endpoint
+
 # payload = {'executionType': 'espresso',
 #            'runningType': 'fastFeedback',
 #            'deviceQueries': '@os=\'android\''}
+
+if deviceQueries == 'android':
+    deviceQuery = '@os=\'android\''
+else:
+    deviceQuery = '@os=\'ios\''
+
+payload = {
+    'executionType': 'espresso',
+    'runningType': runningType,
+    'deviceQueries': deviceQuery
+}
+
 # files = [
-#     ('app', open('/C:/Users/Rahee/Desktop/Clients/medidata/Archive/app-local-debug.apk','rb')),
-#     ('testApp', open('/C:/Users/Rahee/Desktop/Clients/medidata/Archive/app-local-debug-androidTest.apk','rb'))
+#     ('app', open('C:/Users/RaheeKhan/Desktop/XebiaLabs/Espresso_And_XCUITest/app-debug.apk','rb')),
+#     ('testApp', open('C:/Users/RaheeKhan/Desktop/XebiaLabs/Espresso_And_XCUITest/app-debug-androidTest.apk','rb'))
 # ]
-# headers = {
-#     'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ4cC51Ijo3MzU0NDMsInhwLnAiOjE2NjA5MDMsInhwLm0iOjE1Nzg2MDM5NTA1MTUsImV4cCI6MTkxMDc5NDYyOCwiaXNzIjoiY29tLmV4cGVyaXRlc3QifQ.CMJSREYHuaHYC3GTDGYO6VN7Osf0Rnq6oX_LHNZjtl4',
-#     'Cookie': 'XSRF-TOKEN=2a329ebd-d9b3-42e9-b0db-109552a712bc; JSESSIONID=32DC33D46F72D4B5DF361CD48DC27F5A'
-# }
-# response = requests.request("POST", url, headers=headers, data = payload, files = files)
-# print(response.text.encode('utf8'))
+
+files = [
+    ('app', open(app,'rb')),
+    ('testApp', open(testApp,'rb'))
+]
+
+usrPass = username + ":" + password
+
+headers = {
+    'Authorization' : 'Basic %s' % base64.b64encode(usrPass)
+}
+
+logger.error("Header Object loaded correctly with input parameters.")
+logger.error(json.dumps(headers))
+
+logger.error("Payload Object loaded correctly with input parameters.")
+logger.error(json.dumps(payload))
+
+response = requests.request("POST", url, headers=headers, data=payload, files=files, verify=False)
+
+if response.status_code != 200:
+    raise Exception(
+        "Error executing Espresso Test Case. Please check input parameters."
+    )
+    # logger.error(r.errorDump())
+else:
+    output = response.text
