@@ -72,10 +72,6 @@ logger = LoggerFactory.getLogger("Experitest")
 api_endpoint = "/api/v1/test-run/execute-test-run-async"
 url = server.get('url') + "%s" % api_endpoint
 
-# payload = {'executionType': 'espresso',
-#            'runningType': 'fastFeedback',
-#            'deviceQueries': '@os=\'android\''}
-
 if deviceQueries == 'android':
     deviceQuery = '@os=\'android\''
 else:
@@ -87,11 +83,7 @@ payload = {
     'deviceQueries': deviceQuery
 }
 
-# files = [
-#     ('app', open('C:/Users/RaheeKhan/Desktop/XebiaLabs/Espresso_And_XCUITest/app-debug.apk','rb')),
-#     ('testApp', open('C:/Users/RaheeKhan/Desktop/XebiaLabs/Espresso_And_XCUITest/app-debug-androidTest.apk','rb'))
-# ]
-
+# Referencing .apk files for Application (app) and Unit Tests (testApp)
 files = [
     ('app', open(app,'rb')),
     ('testApp', open(testApp,'rb'))
@@ -112,9 +104,6 @@ logger.error(json.dumps(payload))
 response = requests.request("POST", url, headers=headers, data=payload, files=files, verify=False)
 
 if response.status_code != 200:
-    raise Exception(
-        "Error executing Espresso Test Case. Please check input parameters."
-    )
-    # logger.error(r.errorDump())
+    raise Exception("Error executing Espresso Test Case. Please check input parameters.")
 else:
     output = response.text
