@@ -2,7 +2,7 @@
 <!--
 
     Copyright 2020 XEBIALABS
-    
+
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
     The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -30,7 +30,6 @@
                   description="The Experitest Server definition to use" referenced-type="experitest.Server" kind="ci"/>
     </type>
 
-<!--    <type type="experitest.unittests.TriggerEspressoTestCase" extends="experitest.Task">-->
     <type type="experitest.TriggerEspressoTestCase" extends="experitest.Task">
         <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
         <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
@@ -39,6 +38,7 @@
         <property name="testApp" category="input" label="Test APK Application" required="true" description="Path to the Test APK file, i.e. C:\Desktop\file-androidTest.apk" kind="string" />
         <property name="deviceQueries" category="input" label="Device Query" required="true" description="A Device Query based on the device(s) the tests should run on" kind="string" />
         <property name="output" category="output"/>
+        <property name="espressoTestRunId" category="output"/>
     </type>
 
     <type type="experitest.TriggerXCUITestCase" extends="experitest.Task">
@@ -49,30 +49,7 @@
         <property name="testApp" category="input" label="Test IPA Application" required="true" description="Path to the Test IPA file, i.e. C:\Desktop\fileTests.ipa" kind="string" />
         <property name="deviceQueries" category="input" label="Device Query" required="true" description="A Device Query based on the device(s) the tests should run on" kind="string" />
         <property name="output" category="output"/>
-    </type>
-
-    <type type="experitest.UploadBuildToSeeTestCloud" extends="experitest.Task">
-        <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
-        <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
-        <property name="app" category="input" label="Upload Application" required="true" description="Path to the upload file, i.e. C:\Desktop\file.ipa" kind="string" />
-        <property name="output" category="output"/>
-    </type>
-
-    <type type="experitest.CreateTestViewGroup" extends="experitest.Task">
-        <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
-        <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
-        <property name="groupName" category="input" label="Test View Name" required="true" description="Name of the newly created test view group" kind="string" />
-        <property name="byKey" category="input" label="View By Key" required="true" description="The key name selected in the view by panel" kind="string" />
-        <property name="groupByKey1" category="input" label="Group By Left Panel" required="true" description="The key name selected in the group by left panel" kind="string" />
-        <property name="groupByKey2" category="input" label="Group By Right Panel" required="true" description="The key name selected in the group by right panel" kind="string" />
-        <property name="output" category="output"/>
-    </type>
-
-    <type type="experitest.GetTestViewGroupSummary" extends="experitest.Task">
-        <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
-        <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
-        <property name="groupId" category="input" label="Test View Group ID" required="true" description="Test View Group ID" kind="string" />
-        <property name="output" category="output"/>
+        <property name="xcuiTestRunId" category="output"/>
     </type>
 
     <type type="experitest.Tile" extends="xlrelease.Tile" virtual="true">

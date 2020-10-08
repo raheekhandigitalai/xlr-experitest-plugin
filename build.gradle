@@ -1,10 +1,27 @@
 plugins {
-  id "com.github.hierynomus.license" version "0.14.0"
+  id "com.github.hierynomus.license" version "0.15.0"
+  id "com.xebialabs.xl.docker" version "1.1.0"
+  id "com.github.hierynomus.jython" version "0.8.0"
   id "nebula.release" version "6.0.0"
 }
+defaultTasks 'build'
 
 apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
 
+dependencies {
+  jython ":requests:2.23.0"
+}
+
+xlDocker {
+  compileImage = 'xebialabsunsupported/xlr_dev_compile'
+  compileVersion = '8.6.2'
+  runImage = 'xebialabsunsupported/xlr_dev_run'
+  runVersion = '8.6.2'
+  runPortMapping = '15516:5516'
+}
 
 if (!project.hasProperty('release.scope')) {
   project.ext['release.scope'] = 'patch'
@@ -19,5 +36,5 @@ license {
   strictCheck false
   ext.year = Calendar.getInstance().get(Calendar.YEAR)
   ext.name = 'XEBIALABS'
-//  excludes(["**/requests/*", "**/*.json", "**/*.min.js"]) // Ability to exclude files that doesn't contain license information
+  excludes(["**/requests/*", "**/*.json", "**/*.min.js"])
 }
