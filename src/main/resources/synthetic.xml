@@ -66,6 +66,15 @@
         <property name="xcuiTestRunId" category="output"/>
     </type>
 
+    <type type="experitest.UploadBuildToSeeTestCloudInstance" extends="experitest.Task">
+        <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
+        <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
+        <property name="file" category="input" label=".APK / .IPA Application" required="true" description="Path to the .APK / .IPA file, i.e. C:\Desktop\fileTests.ipa" kind="string" />
+        <property name="uniqueName" category="input" label="Unique Name" description="Provide Unique Name if the same build version exists to avoid upload conflict" kind="string" />
+        <property name="projectName" category="input" label="Project Name" description="If user is part of multiple projects, need to define which Project to upload the build to" kind="string" />
+        <property name="output" category="output"/>
+    </type>
+
     <type type="experitest.Tile" extends="xlrelease.Tile" virtual="true">
         <property default="release,folder,global" hidden="true" name="supportedScopes" kind="list_of_string"/>
         <property name="instance" category="input" required="true" referenced-type="experitest.Server" kind="ci"/>
