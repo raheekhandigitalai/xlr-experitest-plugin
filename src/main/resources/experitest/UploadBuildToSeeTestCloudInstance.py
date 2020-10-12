@@ -10,4 +10,4 @@
 
 from experitest.Client import (uploadBuildToSeeTestCloud)
 
-output = uploadBuildToSeeTestCloud(server, uniqueName, projectName, username, password)
+output = uploadBuildToSeeTestCloud(server, file, uniqueName, projectName, username, password)
