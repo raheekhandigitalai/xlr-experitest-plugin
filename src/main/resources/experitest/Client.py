@@ -75,6 +75,41 @@ def triggerXCUITest(serverParams, deviceQueries, runningType, app, testApp, user
         xcuiTestRunId = getTestRunId(response.content)
         return response.text, xcuiTestRunId
 
+def getTestRunStatusEspresso(serverParams, username, password):
+    # setup the request url
+    api_endpoint = "/api/v1/test-run/" + espressoTestRunId + "/status"
+    url = serverParams.get('url') + "%s" % api_endpoint
+
+    usrPass = username + ":" + password
+
+    headers = {
+        'Authorization': 'Basic %s' % base64.b64encode(usrPass)
+    }
+
+    response = requests.request("GET", url, headers=headers, verify=False)
+
+    if response.status_code != 200:
+        raise Exception("Error executing Test Run Status API for Espresso. Please check input parameters.")
+    else:
+        return response.text
+
+def getTestRunStatusXCUITest(serverParams, username, password):
+    # setup the request url
+    api_endpoint = "/api/v1/test-run/" + xcuiTestRunId + "/status"
+    url = serverParams.get('url') + "%s" % api_endpoint
+
+    usrPass = username + ":" + password
+
+    headers = {
+        'Authorization': 'Basic %s' % base64.b64encode(usrPass)
+    }
+
+    response = requests.request("GET", url, headers=headers, verify=False)
+
+    if response.status_code != 200:
+        raise Exception("Error executing Test Run Status API for XCUITest. Please check input parameters.")
+    else:
+        return response.text
 
 def setDeviceQuery(deviceQueries):
     if deviceQueries == 'android':
