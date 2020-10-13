@@ -33,6 +33,7 @@ def triggerEspressoTest(serverParams, deviceQueries, runningType, app, testApp, 
     files = setFileDefinitions(app, testApp)
 
     usrPass = username + ":" + password
+
     headers = {
         'Authorization': 'Basic %s' % base64.b64encode(usrPass)
     }
@@ -112,35 +113,63 @@ def getTestRunStatusXCUITest(serverParams, username, password):
     else:
         return response.text
 
-def uploadBuildToSeeTestCloud(serverParams, appPath, uniqueName, projectName, username, password):
+def uploadBuildToSeeTestCloud(serverParams, filePath, uniqueName, projectName, username, password):
     # setup the request url
     api_endpoint = "/api/v1/applications/new"
     url = serverParams.get('url') + "%s" % api_endpoint
 
     payload = {
-        'uniqueName': uniqueName, # Optional Unique Name, used to avoid conflict when uploading same version of a build
-        'camera': True, # For Simulate Capture feature https://docs.experitest.com/display/LT/Simulate+Capture
-        'touchId': True # For Mock Authentication feature https://docs.experitest.com/display/LT/Mock+Authentication
+        'camera': True,
+        'touchId': True,
+        'uniqueName': uniqueName,
     }
 
-    # Referencing .apk or .ipa file for Application Upload
     files = [
-        ('file', open(appPath, 'rb'))
+        ('file', open(filePath,'rb'))
     ]
 
     usrPass = username + ":" + password
 
     headers = {
         'Authorization': 'Basic %s' % base64.b64encode(usrPass),
-        'projectName': projectName # Optional, if user is part of multiple projects, then needed
+        'projectName': projectName
     }
 
     response = requests.request("POST", url, headers=headers, data=payload, files=files, verify=False)
 
     if response.status_code != 200:
-        raise Exception("Error Uploading Build to SeeTestCloud. Please check input parameters.")
+        raise Exception("Error executing Test Run Status API for XCUITest. Please check input parameters.")
     else:
         return response.text
+
+def createTestView(serverParams, testViewName, projectName, username, password):
+    # setup the request url
+    api_endpoint = "/reporter/api/testView"
+    url = serverParams.get('url') + "%s" % api_endpoint
+
+    payload = {
+        'name': testViewName,
+        'byKey': 'date',
+        'groupByKey1': 'device.os',
+        'groupByKey2': 'device.version',
+        'showInDashboard': False,
+        'viewBy': 'data'
+    }
+
+    usrPass = username + ":" + password
+
+    headers = {
+        'Authorization': 'Basic %s' % base64.b64encode(usrPass),
+        'projectName': projectName
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload, verify=False)
+
+    if response.status_code != 200:
+        raise Exception("Error creating a Test View. Please check input parameters.")
+    else:
+        testViewId = getTestViewId(response.content)
+        return response.text, testViewId
 
 def setDeviceQuery(deviceQueries):
     if deviceQueries == 'android':
@@ -172,3 +201,14 @@ def getTestRunId(responseContent):
             break
 
     return testRunId
+
+def getTestViewId(responseContent):
+    testViewId = ""
+    data = json.loads(responseContent)
+
+    for key in data:
+        if key == "id":
+            testViewId = data['id']
+        break
+
+    return testViewId

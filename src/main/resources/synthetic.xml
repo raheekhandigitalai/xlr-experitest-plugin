@@ -52,27 +52,36 @@
         <property name="xcuiTestRunId" category="output"/>
     </type>
 
-    <type type="experitest.GetTestRunStatusEspressoTestCase" extends="experitest.Task">
+    <type type="experitest.GetTestRunStatusEspresso" extends="experitest.Task">
         <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
         <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
         <property name="output" category="output"/>
         <property name="espressoTestRunId" category="output"/>
     </type>
 
-    <type type="experitest.GetTestRunStatusXCUITestCase" extends="experitest.Task">
+    <type type="experitest.GetTestRunStatusXCUITest" extends="experitest.Task">
         <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
         <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
         <property name="output" category="output"/>
         <property name="xcuiTestRunId" category="output"/>
     </type>
 
-    <type type="experitest.UploadBuildToSeeTestCloudInstance" extends="experitest.Task">
+    <type type="experitest.UploadBuildToSeeTestCloud" extends="experitest.Task">
         <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
         <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
         <property name="file" category="input" label="APK / IPA Application" required="true" description="Path to the .APK / .IPA file, i.e. C:\Desktop\fileTests.ipa" kind="string" />
         <property name="uniqueName" category="input" label="Unique Name (Optional)" description="Provide Unique Name if the same build version exists to avoid upload conflict" kind="string" />
         <property name="projectName" category="input" label="Project Name (Optional)" description="If user is part of multiple projects, need to define which Project to upload the build to" kind="string" />
         <property name="output" category="output"/>
+    </type>
+
+    <type type="experitest.CreateTestView" extends="experitest.Task">
+        <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
+        <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
+        <property name="testViewName" category="input" label="Test View Name" required="true" description="Give a name for the Test View to be created" kind="string" />
+        <property name="projectName" category="input" label="Project Name (Optional)" description="If user is part of multiple projects, need to define which Project to upload the build to" kind="string" />
+        <property name="output" category="output"/>
+        <property name="testViewId" category="output"/>
     </type>
 
     <type type="experitest.Tile" extends="xlrelease.Tile" virtual="true">
