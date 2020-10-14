@@ -77,6 +77,7 @@ def triggerXCUITest(serverParams, deviceQueries, runningType, app, testApp, user
         xcuiTestRunId = getTestRunId(response.content)
         return response.text, xcuiTestRunId
 
+# Untested - Exploratory phase
 def getTestRunStatusEspresso(serverParams, username, password):
     # setup the request url
     api_endpoint = "/api/v1/test-run/" + espressoTestRunId + "/status"
@@ -90,11 +91,17 @@ def getTestRunStatusEspresso(serverParams, username, password):
 
     response = requests.request("GET", url, headers=headers, verify=False)
 
+    testRunStatus = getTestRunStatus(response.content)
+
+    while testRunStatus != "SUCCESS":
+        response = requests.request("GET", url, headers=headers, verify=False)
+
     if response.status_code != 200:
         raise Exception("Error executing Test Run Status API for Espresso. Please check input parameters.")
     else:
         return response.text
 
+# Untested - Exploratory phase
 def getTestRunStatusXCUITest(serverParams, username, password):
     # setup the request url
     api_endpoint = "/api/v1/test-run/" + xcuiTestRunId + "/status"
@@ -142,6 +149,7 @@ def uploadBuildToSeeTestCloud(serverParams, filePath, uniqueName, projectName, u
     else:
         return response.text
 
+# Untested - Exploratory phase
 def createTestView(serverParams, testViewName, projectName, username, password):
     # setup the request url
     api_endpoint = "/reporter/api/testView"
@@ -202,6 +210,19 @@ def getTestRunId(responseContent):
 
     return testRunId
 
+# Untested - Exploratory phase
+def getTestRunStatus(responseContent):
+    testRunStatus = ""
+    status = json.loads(responseContent)
+
+    for key in status:
+        if key == "status":
+            testRunStatus = status['status']
+            break
+
+    return testRunStatus
+
+# Untested - Exploratory phase
 def getTestViewId(responseContent):
     testViewId = ""
     data = json.loads(responseContent)
