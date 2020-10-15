@@ -52,18 +52,11 @@
         <property name="xcuiTestRunId" category="output"/>
     </type>
 
-    <type type="experitest.GetTestRunStatusEspresso" extends="experitest.Task">
+    <type type="experitest.GetTestRunStatusForUnitTests" extends="experitest.Task">
         <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
         <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
+        <property name="testRunId" category="input" label="Espresso Run ID" required="true"/>
         <property name="output" category="output"/>
-        <property name="espressoTestRunId" category="output"/>
-    </type>
-
-    <type type="experitest.GetTestRunStatusXCUITest" extends="experitest.Task">
-        <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
-        <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
-        <property name="output" category="output"/>
-        <property name="xcuiTestRunId" category="output"/>
     </type>
 
     <type type="experitest.UploadBuildToSeeTestCloud" extends="experitest.Task">

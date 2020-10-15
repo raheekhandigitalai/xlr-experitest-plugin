@@ -77,46 +77,26 @@ def triggerXCUITest(serverParams, deviceQueries, runningType, app, testApp, user
         xcuiTestRunId = getTestRunId(response.content)
         return response.text, xcuiTestRunId
 
-# Untested - Exploratory phase
-def getTestRunStatusEspresso(serverParams, username, password):
+def getTestRunStatusForUnitTests(serverParams, testRunId, username, password):
     # setup the request url
-    api_endpoint = "/api/v1/test-run/" + espressoTestRunId + "/status"
+    api_endpoint = "/api/v1/test-run/%s/status" % testRunId
     url = serverParams.get('url') + "%s" % api_endpoint
+
+    payload = {}
+    files = {}
 
     usrPass = username + ":" + password
 
     headers = {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept': 'application/json;charset=UTF-8',
         'Authorization': 'Basic %s' % base64.b64encode(usrPass)
     }
 
-    response = requests.request("GET", url, headers=headers, verify=False)
-
-    testRunStatus = getTestRunStatus(response.content)
-
-    while testRunStatus != "SUCCESS":
-        response = requests.request("GET", url, headers=headers, verify=False)
+    response = requests.request("GET", url, headers=headers, data=payload, files=files, verify=False)
 
     if response.status_code != 200:
         raise Exception("Error executing Test Run Status API for Espresso. Please check input parameters.")
-    else:
-        return response.text
-
-# Untested - Exploratory phase
-def getTestRunStatusXCUITest(serverParams, username, password):
-    # setup the request url
-    api_endpoint = "/api/v1/test-run/" + xcuiTestRunId + "/status"
-    url = serverParams.get('url') + "%s" % api_endpoint
-
-    usrPass = username + ":" + password
-
-    headers = {
-        'Authorization': 'Basic %s' % base64.b64encode(usrPass)
-    }
-
-    response = requests.request("GET", url, headers=headers, verify=False)
-
-    if response.status_code != 200:
-        raise Exception("Error executing Test Run Status API for XCUITest. Please check input parameters.")
     else:
         return response.text
 
@@ -213,11 +193,14 @@ def getTestRunId(responseContent):
 # Untested - Exploratory phase
 def getTestRunStatus(responseContent):
     testRunStatus = ""
-    status = json.loads(responseContent)
+    data = json.loads(responseContent)
 
-    for key in status:
-        if key == "status":
-            testRunStatus = status['status']
+    for key in data:
+        if key == "data":
+            for subKey in data['data']:
+                if subKey == "Test Run State":
+                    testRunId = data['data']['Test Run State']
+                    break
             break
 
     return testRunStatus
