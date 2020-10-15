@@ -200,7 +200,7 @@ def getTestRunStatus(responseContent):
         if key == "data":
             for subKey in data['data']:
                 if subKey == "Test Run State":
-                    testRunId = data['data']['Test Run State']
+                    testRunStatus = data['data']['Test Run State']
                     break
             break
 
