@@ -55,7 +55,7 @@
     <type type="experitest.GetTestRunStatusForUnitTests" extends="experitest.Task">
         <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
         <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
-        <property name="testRunId" category="input" label="Espresso Run ID" required="true"/>
+        <property name="testRunId" category="input" label="Test Run ID" required="true"/>
         <property name="output" category="output"/>
     </type>
 

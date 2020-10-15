@@ -90,6 +90,7 @@ def getTestRunStatusForUnitTests(serverParams, testRunId, username, password):
     headers = {
         'Content-Type': 'application/json;charset=UTF-8',
         'Accept': 'application/json;charset=UTF-8',
+        'Accept-Encoding': 'deflate',
         'Authorization': 'Basic %s' % base64.b64encode(usrPass)
     }
 
