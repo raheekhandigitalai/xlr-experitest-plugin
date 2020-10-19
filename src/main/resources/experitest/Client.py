@@ -96,8 +96,8 @@ def getTestRunStatusForUnitTests(serverParams, testRunId, username, password):
 
     testRunStatus = getTestRunStatus(response.content)
 
-    while testRunStatus != "Finished":
-        time.sleep(5)
+    while testRunStatus != "Finished" and "Running":
+        time.sleep(20)
         response = requests.request("GET", url, headers=headers, verify=False)
         testRunStatus = getTestRunStatus(response.content)
 
