@@ -11,6 +11,7 @@
 import requests
 import json
 import base64
+import time
 import org.slf4j.LoggerFactory as LoggerFactory
 
 logger = LoggerFactory.getLogger("Experitest")
@@ -82,9 +83,6 @@ def getTestRunStatusForUnitTests(serverParams, testRunId, username, password):
     api_endpoint = "/api/v1/test-run/%s/status" % testRunId
     url = serverParams.get('url') + "%s" % api_endpoint
 
-    payload = {}
-    files = {}
-
     usrPass = username + ":" + password
 
     headers = {
@@ -94,7 +92,14 @@ def getTestRunStatusForUnitTests(serverParams, testRunId, username, password):
         'Authorization': 'Basic %s' % base64.b64encode(usrPass)
     }
 
-    response = requests.request("GET", url, headers=headers, data=payload, files=files, verify=False)
+    response = requests.request("GET", url, headers=headers, verify=False)
+
+    testRunStatus = getTestRunStatus(response.content)
+
+    while testRunStatus != "Finished":
+        time.sleep(5)
+        response = requests.request("GET", url, headers=headers, verify=False)
+        testRunStatus = getTestRunStatus(response.content)
 
     if response.status_code != 200:
         raise Exception("Error executing Test Run Status API for Espresso. Please check input parameters.")
@@ -136,6 +141,8 @@ def createTestView(serverParams, testViewName, projectName, username, password):
     api_endpoint = "/reporter/api/testView"
     url = serverParams.get('url') + "%s" % api_endpoint
 
+    logger.error(url)
+
     payload = {
         'name': testViewName,
         'byKey': 'date',
@@ -148,11 +155,16 @@ def createTestView(serverParams, testViewName, projectName, username, password):
     usrPass = username + ":" + password
 
     headers = {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept': 'application/json;charset=UTF-8',
+        'Accept-Encoding': 'deflate',
         'Authorization': 'Basic %s' % base64.b64encode(usrPass),
         'projectName': projectName
     }
 
+    logger.error("Before the call")
     response = requests.request("POST", url, headers=headers, data=payload, verify=False)
+    logger.error("After the call")
 
     if response.status_code != 200:
         raise Exception("Error creating a Test View. Please check input parameters.")
@@ -191,7 +203,6 @@ def getTestRunId(responseContent):
 
     return testRunId
 
-# Untested - Exploratory phase
 def getTestRunStatus(responseContent):
     testRunStatus = ""
     data = json.loads(responseContent)
