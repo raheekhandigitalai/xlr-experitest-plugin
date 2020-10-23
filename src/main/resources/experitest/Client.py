@@ -149,14 +149,16 @@ def createTestView(serverParams, testViewName, username, password):
 
     logger.error(url)
 
-    payload = {
-        'name': testViewName,
-        'byKey': 'date',
-        'groupByKey1': 'device.os',
-        'groupByKey2': 'device.version',
-        'showInDashboard': False,
-        'viewBy': 'data'
-    }
+    payload = json.dumps(
+        {
+            'name': testViewName,
+            'byKey': 'date',
+            'groupByKey1': 'device.os',
+            'groupByKey2': 'device.version',
+            'showInDashboard': False,
+            'viewBy': 'data'
+        }
+    )
 
     usrPass = username + ":" + password
 
@@ -164,7 +166,6 @@ def createTestView(serverParams, testViewName, username, password):
         'Content-Type': 'application/json',
         'Accept': '*/*',
         'Accept-Encoding': 'deflate',
-        'Connection': 'keep-alive',
         'Authorization': 'Basic %s' % base64.b64encode(usrPass)
     }
 
