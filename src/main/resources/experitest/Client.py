@@ -44,7 +44,7 @@ def triggerEspressoTest(serverParams, deviceQueries, runningType, app, testApp, 
     if response.status_code != 200:
         raise Exception("Error executing Espresso Test Case. Please check input parameters.")
     else:
-        espressoTestRunId = getTestRunId(response.content)
+        espressoTestRunId = getJSONValueFromResponseContent('Test Run Id', response.content)
         return response.text, espressoTestRunId
 
 
@@ -75,7 +75,7 @@ def triggerXCUITest(serverParams, deviceQueries, runningType, app, testApp, user
     if response.status_code != 200:
         raise Exception("Error executing XCUI Test Case. Please check input parameters.")
     else:
-        xcuiTestRunId = getTestRunId(response.content)
+        xcuiTestRunId = getJSONValueFromResponseContent('Test Run Id', response.content)
         return response.text, xcuiTestRunId
 
 def getTestRunStatusAndResultForUnitTests(serverParams, testRunId, username, password):
@@ -94,22 +94,23 @@ def getTestRunStatusAndResultForUnitTests(serverParams, testRunId, username, pas
 
     response = requests.request("GET", url, headers=headers, verify=False)
 
-    testRunStatus = getTestRunStatus(response.content)
+    testRunStatus = getJSONValueFromResponseContent('Test Run State', response.content)
 
     while testRunStatus != "Finished" and "Running":
         time.sleep(20)
         response = requests.request("GET", url, headers=headers, verify=False)
-        testRunStatus = getTestRunStatus(response.content)
+        testRunStatus = getJSONValueFromResponseContent('Test Run State', response.content)
 
     if response.status_code != 200:
         raise Exception("Error executing Test Run Status API for Espresso. Please check input parameters.")
     else:
-        totalNumberOfTests = getTotalNumberOfTests(response.content)
-        passedCount = passed(response.content)
-        failedCount = failed(response.content)
-        skippedCount = skipped(response.content)
-        ignoredCount = ignored(response.content)
-        reporterLinkUrl = reporterLink(response.content)
+        totalNumberOfTests = getJSONValueFromResponseContent('Total number of tests', response.content)
+        passedCount = getJSONValueFromResponseContent('Number of passed tests', response.content)
+        failedCount = getJSONValueFromResponseContent('Number of failed tests', response.content)
+        skippedCount = getJSONValueFromResponseContent('Number of skipped tests', response.content)
+        ignoredCount = getJSONValueFromResponseContent('Number of ignored tests', response.content)
+        reporterLinkUrl = getJSONValueFromResponseContent('Link to Reporter', response.content)
+
         return testRunStatus, totalNumberOfTests, passedCount, failedCount, skippedCount, ignoredCount, reporterLinkUrl
 
 def uploadBuildToSeeTestCloud(serverParams, filePath, uniqueName, projectName, username, password):
@@ -141,13 +142,10 @@ def uploadBuildToSeeTestCloud(serverParams, filePath, uniqueName, projectName, u
     else:
         return response.text
 
-# Untested - Exploratory phase
 def createTestView(serverParams, testViewName, username, password):
     # setup the request url
     api_endpoint = "/reporter/api/testView"
     url = serverParams.get('url') + "%s" % api_endpoint
-
-    logger.error(url)
 
     payload = json.dumps(
         {
@@ -169,9 +167,7 @@ def createTestView(serverParams, testViewName, username, password):
         'Authorization': 'Basic %s' % base64.b64encode(usrPass)
     }
 
-    logger.error("Before the call")
     response = requests.request("POST", url, headers=headers, data=payload, verify=False)
-    logger.error("After the call")
 
     if response.status_code != 200:
         raise Exception("Error creating a Test View. Please check input parameters.")
@@ -187,7 +183,6 @@ def setDeviceQuery(deviceQueries):
 
     return deviceQuery
 
-
 def setFileDefinitions(app, testApp):
     files = [
         ('app', open(app, 'rb')),
@@ -196,117 +191,19 @@ def setFileDefinitions(app, testApp):
 
     return files
 
-def getTestRunId(responseContent):
-    testRunId = ""
+# This gets the given 'value' based on the response content which is structured as referenced here: https://docs.experitest.com/display/TE/Manage+Test+Run+with+the+API#ManageTestRunwiththeAPI-StatusoftheAPIRun
+def getJSONValueFromResponseContent(value, responseContent):
     data = json.loads(responseContent)
 
     for key in data:
         if key == "data":
             for subKey in data['data']:
-                if subKey == "Test Run Id":
-                    testRunId = data['data']['Test Run Id']
+                if subKey == "%s" % value:
+                    value = data['data']['%s' % value]
                     break
             break
 
-    return testRunId
-
-def getTestRunStatus(responseContent):
-    testRunStatus = ""
-    data = json.loads(responseContent)
-
-    for key in data:
-        if key == "data":
-            for subKey in data['data']:
-                if subKey == "Test Run State":
-                    testRunStatus = data['data']['Test Run State']
-                    break
-            break
-
-    return testRunStatus
-
-def getTotalNumberOfTests(responseContent):
-    totalNumberOfTests = ""
-    data = json.loads(responseContent)
-
-    for key in data:
-        if key == "data":
-            for subKey in data['data']:
-                if subKey == "Total number of tests":
-                    totalNumberOfTests = data['data']['Total number of tests']
-                    break
-            break
-
-    return totalNumberOfTests
-
-def passed(responseContent):
-    passedCount = ""
-    data = json.loads(responseContent)
-
-    for key in data:
-        if key == "data":
-            for subKey in data['data']:
-                if subKey == "Number of passed tests":
-                    passedCount = data['data']['Number of passed tests']
-                    break
-            break
-
-    return passedCount
-
-def failed(responseContent):
-    failedCount = ""
-    data = json.loads(responseContent)
-
-    for key in data:
-        if key == "data":
-            for subKey in data['data']:
-                if subKey == "Number of failed tests":
-                    failedCount = data['data']['Number of failed tests']
-                    break
-            break
-
-    return failedCount
-
-def skipped(responseContent):
-    skippedCount = ""
-    data = json.loads(responseContent)
-
-    for key in data:
-        if key == "data":
-            for subKey in data['data']:
-                if subKey == "Number of skipped tests":
-                    skippedCount = data['data']['Number of skipped tests']
-                    break
-            break
-
-    return skippedCount
-
-def ignored(responseContent):
-    ignoredCount = ""
-    data = json.loads(responseContent)
-
-    for key in data:
-        if key == "data":
-            for subKey in data['data']:
-                if subKey == "Number of ignored tests":
-                    ignoredCount = data['data']['Number of ignored tests']
-                    break
-            break
-
-    return ignoredCount
-
-def reporterLink(responseContent):
-    reporterLinkUrl = ""
-    data = json.loads(responseContent)
-
-    for key in data:
-        if key == "data":
-            for subKey in data['data']:
-                if subKey == "Link to Reporter":
-                    reporterLinkUrl = data['data']['Link to Reporter']
-                    break
-            break
-
-    return reporterLinkUrl
+    return value
 
 # Untested - Exploratory phase
 def getTestViewId(responseContent):

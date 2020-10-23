@@ -29,20 +29,10 @@ headers = {
 # send GET  request to /reporter/api/projects endpoint
 r = requests.get(url, headers=headers, verify=False)
 
-# logger.error(r.content)
-# logger.error(r.json())
-# logger.error(r.iter_content())
-# logger.error(r.reason)
-# logger.error(r.status_code)
-# logger.error(r.message)
-# logger.error(r.data)
-# logger.error(r.text)
-
 # check for good response
 if r.status_code != 200:
     raise Exception(
         "Error retrieving authorization token from Experitest Server. Please check username and password."
-        # . Reason: %s" % r.status
     )
 else:
     logger.error('Experitest return object: %s' % r.text)
