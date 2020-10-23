@@ -52,11 +52,17 @@
         <property name="xcuiTestRunId" category="output"/>
     </type>
 
-    <type type="experitest.GetTestRunStatusForUnitTests" extends="experitest.Task">
+    <type type="experitest.GetTestRunStatusAndResultForUnitTests" extends="experitest.Task">
         <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
         <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
         <property name="testRunId" category="input" label="Test Run ID" required="true"/>
-        <property name="output" category="output"/>
+        <property name="status" category="output"/>
+        <property name="totalNumberOfTests" category="output"/>
+        <property name="passed" category="output"/>
+        <property name="failed" category="output"/>
+        <property name="skipped" category="output"/>
+        <property name="ignored" category="output"/>
+        <property name="reporterLink" category="output"/>
     </type>
 
     <type type="experitest.UploadBuildToSeeTestCloud" extends="experitest.Task">
@@ -72,7 +78,6 @@
         <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
         <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
         <property name="testViewName" category="input" label="Test View Name" required="true" description="Give a name for the Test View to be created" kind="string" />
-        <property name="projectName" category="input" label="Project Name (Optional)" description="If user is part of multiple projects, need to define which Project to upload the build to" kind="string" />
         <property name="output" category="output"/>
         <property name="testViewId" category="output"/>
     </type>

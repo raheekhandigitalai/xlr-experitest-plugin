@@ -10,4 +10,4 @@
 
 from experitest.Client import (createTestView)
 
-output, testViewId = createTestView(server, testViewName, projectName, username, password)
+output, testViewId = createTestView(server, testViewName, username, password)
