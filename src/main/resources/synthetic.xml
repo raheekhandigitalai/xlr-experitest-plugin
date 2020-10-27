@@ -82,6 +82,14 @@
         <property name="testViewId" category="output"/>
     </type>
 
+    <type type="experitest.GetTestViewResults" extends="experitest.Task">
+        <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
+        <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
+        <property name="testViewId" category="input" label="Test View ID" required="true" description="Provide the Test View ID" kind="string" />
+        <property name="jenkinsBuildNumber" category="input" label="Jenkins Build Number" required="true" description="Provide the Jenkins Build Number" kind="string" />
+        <property name="output" category="output"/>
+    </type>
+
     <type type="experitest.Tile" extends="xlrelease.Tile" virtual="true">
         <property default="release,folder,global" hidden="true" name="supportedScopes" kind="list_of_string"/>
         <property name="instance" category="input" required="true" referenced-type="experitest.Server" kind="ci"/>

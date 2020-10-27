@@ -9,6 +9,7 @@
 #
 
 import requests
+# import urllib
 import json
 import base64
 import time
@@ -174,6 +175,36 @@ def createTestView(serverParams, testViewName, username, password):
     else:
         testViewId = getTestViewId(response.content)
         return response.text, testViewId
+
+def getTestViewResults(serverParams, testViewId, jenkinsBuildNumber, username, password):
+    # setup the request url
+    logger.error('before the api end point is being called')
+    api_endpoint = "/reporter/api/testView/%s/summary" % testViewId
+    filter_api_endpoint = api_endpoint + "?filter={\"Jenkins_Build_Number\":\"%s\"}" % jenkinsBuildNumber
+
+    url = serverParams.get('url') + "%s" % filter_api_endpoint
+
+    logger.error('url value is: %s ' % url)
+
+    usrPass = username + ":" + password
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': '*/*',
+        'Accept-Encoding': 'deflate',
+        'Authorization': 'Basic %s' % base64.b64encode(usrPass)
+    }
+
+    logger.error('before call')
+    response = requests.request("GET", url, headers=headers, verify=False)
+    logger.error('after call')
+
+    if response.status_code != 200:
+        logger.error(response.status_code)
+        raise Exception("Error executing Test Run Status API for Espresso. Please check input parameters.")
+    else:
+        logger.error(response.text)
+        return response.text
 
 def setDeviceQuery(deviceQueries):
     if deviceQueries == 'android':
