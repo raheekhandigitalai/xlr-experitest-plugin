@@ -10,4 +10,4 @@
 
 from experitest.Client import (triggerEspressoTest)
 
-output, espressoTestRunId = triggerEspressoTest(server, deviceQueries, runningType, app, testApp, username, password)
+output, reporterUrlLink, espressoTestRunId = triggerEspressoTest(server, deviceQueries, runningType, app, testApp, username, password)

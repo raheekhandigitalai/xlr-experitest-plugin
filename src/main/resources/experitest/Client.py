@@ -45,8 +45,9 @@ def triggerEspressoTest(serverParams, deviceQueries, runningType, app, testApp, 
     if response.status_code != 200:
         raise Exception("Error executing Espresso Test Case. Please check input parameters.")
     else:
+        reporterUrlLink = getJSONValueFromResponseContent('Link to Reporter', response.content)
         espressoTestRunId = getJSONValueFromResponseContent('Test Run Id', response.content)
-        return response.text, espressoTestRunId
+        return response.text, reporterUrlLink, espressoTestRunId
 
 
 def triggerXCUITest(serverParams, deviceQueries, runningType, app, testApp, username, password):
@@ -76,8 +77,10 @@ def triggerXCUITest(serverParams, deviceQueries, runningType, app, testApp, user
     if response.status_code != 200:
         raise Exception("Error executing XCUI Test Case. Please check input parameters.")
     else:
+        reporterUrlLink = getJSONValueFromResponseContent('Link to Reporter', response.content)
         xcuiTestRunId = getJSONValueFromResponseContent('Test Run Id', response.content)
-        return response.text, xcuiTestRunId
+        return response.text, reporterUrlLink, xcuiTestRunId
+
 
 def getTestRunStatusAndResultForUnitTests(serverParams, testRunId, username, password):
     # setup the request url
@@ -114,6 +117,7 @@ def getTestRunStatusAndResultForUnitTests(serverParams, testRunId, username, pas
 
         return testRunStatus, totalNumberOfTests, passedCount, failedCount, skippedCount, ignoredCount, reporterLinkUrl
 
+
 def uploadBuildToSeeTestCloud(serverParams, filePath, uniqueName, projectName, username, password):
     # setup the request url
     api_endpoint = "/api/v1/applications/new"
@@ -126,7 +130,7 @@ def uploadBuildToSeeTestCloud(serverParams, filePath, uniqueName, projectName, u
     }
 
     files = [
-        ('file', open(filePath,'rb'))
+        ('file', open(filePath, 'rb'))
     ]
 
     usrPass = username + ":" + password
@@ -142,6 +146,7 @@ def uploadBuildToSeeTestCloud(serverParams, filePath, uniqueName, projectName, u
         raise Exception("Error executing Test Run Status API for XCUITest. Please check input parameters.")
     else:
         return response.text
+
 
 def createTestView(serverParams, testViewName, username, password):
     # setup the request url
@@ -176,6 +181,7 @@ def createTestView(serverParams, testViewName, username, password):
         testViewId = getTestViewId(response.content)
         return response.text, testViewId
 
+
 def getTestViewResults(serverParams, testViewId, jenkinsBuildNumber, username, password):
     # setup the request url
     logger.error('before the api end point is being called')
@@ -206,6 +212,7 @@ def getTestViewResults(serverParams, testViewId, jenkinsBuildNumber, username, p
         logger.error(response.text)
         return response.text
 
+
 def setDeviceQuery(deviceQueries):
     if deviceQueries == 'android':
         deviceQuery = '@os=\'android\''
@@ -213,6 +220,7 @@ def setDeviceQuery(deviceQueries):
         deviceQuery = '@os=\'ios\''
 
     return deviceQuery
+
 
 def setFileDefinitions(app, testApp):
     files = [
@@ -222,19 +230,22 @@ def setFileDefinitions(app, testApp):
 
     return files
 
+
 # This gets the given 'value' based on the response content which is structured as referenced here: https://docs.experitest.com/display/TE/Manage+Test+Run+with+the+API#ManageTestRunwiththeAPI-StatusoftheAPIRun
 def getJSONValueFromResponseContent(value, responseContent):
     data = json.loads(responseContent)
+    returnValue = ""
 
     for key in data:
         if key == "data":
             for subKey in data['data']:
                 if subKey == "%s" % value:
-                    value = data['data']['%s' % value]
+                    returnValue = data['data']['%s' % value]
                     break
             break
 
-    return value
+    return returnValue
+
 
 # Untested - Exploratory phase
 def getTestViewId(responseContent):

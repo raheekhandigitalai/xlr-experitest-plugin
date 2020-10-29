@@ -10,4 +10,4 @@
 
 from experitest.Client import (triggerXCUITest)
 
-output, xcuiTestRunId = triggerXCUITest(server, deviceQueries, runningType, app, testApp, username, password)
+output, reporterUrlLink, xcuiTestRunId = triggerXCUITest(server, deviceQueries, runningType, app, testApp, username, password)

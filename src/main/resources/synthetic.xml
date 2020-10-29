@@ -33,22 +33,34 @@
     <type type="experitest.TriggerEspressoTestCase" extends="experitest.Task">
         <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
         <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
-        <property name="runningType" category="input" label="Running Type" required="true" description="Value should be coverage or fastFeedback" kind="string" />
+        <property name="runningType" category="input" kind="enum" label="Running Type" required="true" description="Value should be coverage or fastFeedback">
+            <enum-values>
+                <value>coverage</value>
+                <value>fastFeedback</value>
+            </enum-values>
+        </property>
         <property name="app" category="input" label="APK Application" required="true" description="Path to the APK file, i.e. C:\Desktop\file.apk" kind="string" />
         <property name="testApp" category="input" label="Test APK Application" required="true" description="Path to the Test APK file, i.e. C:\Desktop\file-androidTest.apk" kind="string" />
         <property name="deviceQueries" category="input" label="Device Query" required="true" description="A Device Query based on the device(s) the tests should run on" kind="string" />
         <property name="output" category="output"/>
+        <property name="reporterUrlLink" category="output"/>
         <property name="espressoTestRunId" category="output"/>
     </type>
 
     <type type="experitest.TriggerXCUITestCase" extends="experitest.Task">
         <property name="username" category="input" label="Provide username" required="true" description="The user you want to use to trigger your script." />
         <property name="password" category="input" password="true" label="Provide password" required="true" description="The password for the user provided in the username field." />
-        <property name="runningType" category="input" label="Running Type" required="true" description="Value should be coverage or fastFeedback" kind="string" />
+        <property name="runningType" category="input" kind="enum" label="Running Type" required="true" description="Value should be coverage or fastFeedback">
+            <enum-values>
+                <value>coverage</value>
+                <value>fastFeedback</value>
+            </enum-values>
+        </property>
         <property name="app" category="input" label="IPA Application" required="true" description="Path to the IPA file, i.e. C:\Desktop\file.ipa" kind="string" />
         <property name="testApp" category="input" label="Test IPA Application" required="true" description="Path to the Test IPA file, i.e. C:\Desktop\fileTests.ipa" kind="string" />
         <property name="deviceQueries" category="input" label="Device Query" required="true" description="A Device Query based on the device(s) the tests should run on" kind="string" />
         <property name="output" category="output"/>
+        <property name="reporterUrlLink" category="output"/>
         <property name="xcuiTestRunId" category="output"/>
     </type>
 
